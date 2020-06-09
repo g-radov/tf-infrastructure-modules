@@ -6,7 +6,6 @@ locals {
   }
 }
 
-
 module "this-vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.39.0"
@@ -29,11 +28,11 @@ module "this-iam" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = module.my-cluster.cluster_id
+  name = module.this-cluster.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.my-cluster.cluster_id
+  name = module.this-cluster.cluster_id
 }
 
 provider "kubernetes" {
