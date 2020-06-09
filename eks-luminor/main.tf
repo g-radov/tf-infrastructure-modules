@@ -23,6 +23,11 @@ module "this-vpc" {
 
 }
 
+module "this-iam" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
+  version = "2.10.0"
+}
+
 data "aws_eks_cluster" "cluster" {
   name = module.my-cluster.cluster_id
 }
