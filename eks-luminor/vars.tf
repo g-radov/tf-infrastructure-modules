@@ -14,7 +14,7 @@ variable "vpc_cidr_block" {
   default     = "10.0.0.0/16"
 }
 
-variable "vpc_azs" {
+variable "azs" {
   description = "A list of availability zones names or ids in the region"
   type        = list(string)
   default = [
@@ -24,7 +24,7 @@ variable "vpc_azs" {
   ]
 }
 
-variable "vpc_private_subnets" {
+variable "private_subnets" {
   description = "A list of private subnets inside the VPC"
   type        = list(string)
   default = [
