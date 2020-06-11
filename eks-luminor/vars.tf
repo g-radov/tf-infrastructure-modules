@@ -1,3 +1,8 @@
+variable "environment" {
+  description = "Project environment"
+  type        = string
+}
+
 variable "name" {
   description = "Name of the resource"
   type        = string
@@ -29,7 +34,7 @@ variable "vpc_private_subnets" {
   ]
 }
 
-variable "vpc_enable_nat_gateway" {
+variable "enable_nat_gateway" {
   description = <<EOF
   "Should be true if you want to provision NAT Gateways
   for each of your private networks"
@@ -38,7 +43,7 @@ variable "vpc_enable_nat_gateway" {
   default     = true
 }
 
-variable "vpc_enable_vpn_gateway" {
+variable "enable_vpn_gateway" {
   description = <<EOF
   "Should be true if you want to create a new VPN Gateway
   resource and attach it to the VPC"
