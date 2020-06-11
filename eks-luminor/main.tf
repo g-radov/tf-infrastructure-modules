@@ -26,11 +26,6 @@ module "this-vpc" {
   )
 }
 
-module "this-iam" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
-  version = "2.10.0"
-}
-
 data "aws_eks_cluster" "cluster" {
   name = module.this-cluster.cluster_id
 }
@@ -50,7 +45,7 @@ provider "kubernetes" {
 module "this-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "12.1.0"
-  cluster_name    = "eks-${var.name}"
+  cluster_name    = var.name
   cluster_version = var.cluster_version
   subnets         = module.this-vpc.private_subnets
   vpc_id          = module.this-vpc.vpc_id
