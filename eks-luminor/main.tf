@@ -1,7 +1,8 @@
 locals {
   default = {
     tags = {
-      Terraform = true
+      Environment = var.environment
+      Terraform   = true
     }
   }
 }
@@ -9,8 +10,8 @@ locals {
 module "this-vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.39.0"
-  name    = var.name
-  cidr    = var.cidr
+  name    = "vpc-${var.name}"
+  cidr    = var.vpc_cidr
 
   azs             = var.azs
   private_subnets = var.private_subnets
@@ -18,8 +19,10 @@ module "this-vpc" {
   enable_nat_gateway = var.enable_nat_gateway
   enable_vpn_gateway = var.enable_vpn_gateway
 
-  tags = merge(local.default.tags, var.tags)
-
+  tags = merge(
+    local.default.tags,
+    var.tags
+  )
 }
 
 module "this-iam" {
@@ -46,11 +49,10 @@ provider "kubernetes" {
 module "this-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "12.1.0"
-  cluster_name    = var.cluster_name
+  cluster_name    = "eks-${var.name}"
   cluster_version = var.cluster_version
-  subnets         = var.cluster_subnets
-  vpc_id          = module.eks-vps.vpc_id
-
+  subnets         = module.this-vpc.private_subnets
+  vpc_id          = module.eks-vpc.vpc_id
   worker_groups = [
     {
       instance_type = var.wg_instance_type
