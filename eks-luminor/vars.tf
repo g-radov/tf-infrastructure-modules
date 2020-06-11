@@ -34,6 +34,16 @@ variable "private_subnets" {
   ]
 }
 
+variable "public_subnets" {
+  description = "A list of public subnets inside the VPC"
+  type        = list(string)
+  default = [
+    "10.0.101.0/24",
+    "10.0.102.0/24",
+    "10.0.103.0/24"
+  ]
+}
+
 variable "enable_nat_gateway" {
   description = <<EOF
   "Should be true if you want to provision NAT Gateways
