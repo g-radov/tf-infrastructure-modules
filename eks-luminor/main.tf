@@ -52,7 +52,7 @@ module "this-cluster" {
   cluster_name    = "eks-${var.name}"
   cluster_version = var.cluster_version
   subnets         = module.this-vpc.private_subnets
-  vpc_id          = module.eks-vpc.vpc_id
+  vpc_id          = module.this-vpc.vpc_id
   worker_groups = [
     {
       instance_type = var.wg_instance_type
