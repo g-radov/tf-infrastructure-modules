@@ -59,7 +59,7 @@ variable "enable_vpn_gateway" {
   resource and attach it to the VPC"
   EOF
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "tags" {
