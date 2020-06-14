@@ -53,6 +53,10 @@ module "this-cluster" {
       asg_max_size  = var.wg_asg_max_size
     }
   ]
+  tags = merge(
+    local.default.tags,
+    var.tags
+  )
 }
 
 module "this-iam-role-admin" {
@@ -61,12 +65,13 @@ module "this-iam-role-admin" {
   trusted_role_arns = [
     module.this-iam-user-admin.this_iam_user_arn
   ]
-  trusted_role_services = [
-    "eks.amazonaws.com"
-  ]
   create_role       = true
   role_name         = "eks-luminor-admin"
   role_requires_mfa = true
+  tags = merge(
+    local.default.tags,
+    var.tags
+  )
 }
 
 module "this-iam-user-admin" {
@@ -93,10 +98,11 @@ module "this-read-only-role" {
   trusted_role_arns = [
     module.this-iam-user-read-only.this_iam_user_arn
   ]
-  trusted_role_services = [
-    "eks.amazonaws.com"
-  ]
   create_role       = true
   role_name         = "eks-luminor-read-only"
   role_requires_mfa = true
+  tags = merge(
+    local.default.tags,
+    var.tags
+  )
 }
