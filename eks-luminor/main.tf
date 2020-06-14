@@ -61,7 +61,7 @@ module "this-iam-role-admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "~> 2.0"
   trusted_role_arns = [
-    "arn:aws:iam::657426360076:group/${module.this-iam-group-admin.group_name}"
+    module.this-iam-user-admin.this_iam_user_arn
   ]
   create_role       = true
   role_name         = "eks-luminor-admin"
@@ -72,24 +72,11 @@ module "this-iam-role-admin" {
   ]
 }
 
-module "this-iam-group-admin" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-assumable-roles-policy"
-  version = "~> 2.0"
-  name    = "eks-luminor-admin"
-  assumable_roles = [
-    module.this-iam-role-admin.this_iam_role_arn
-  ]
-  group_users = [
-    module.this-iam-user-admin.this_iam_user_name
-  ]
-}
-
 module "this-iam-user-admin" {
   source                  = "terraform-aws-modules/iam/aws//modules/iam-user"
   version                 = "~> 2.0"
   name                    = "eks-luminor-admin"
   force_destroy           = true
-  pgp_key                 = "keybase:test"
   password_reset_required = false
 }
 
