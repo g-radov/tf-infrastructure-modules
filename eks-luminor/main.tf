@@ -61,7 +61,7 @@ module "this-iam-role-admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "~> 2.0"
   trusted_role_arns = [
-    module.this-iam-group-admin.arn
+    "arn:aws:iam::657426360076:group/${module.this-iam-group-admin.group_name}"
   ]
   create_role       = true
   role_name         = "eks-luminor-admin"
@@ -77,10 +77,10 @@ module "this-iam-group-admin" {
   version = "~> 2.0"
   name    = "eks-luminor-admin"
   assumable_roles = [
-    module.this-iam-role-admin.arn
+    module.this-iam-role-admin.this_iam_role_arn
   ]
   group_users = [
-    module.this-iam-user-admin.id
+    module.this-iam-user-admin.this_iam_user_name
   ]
 }
 
