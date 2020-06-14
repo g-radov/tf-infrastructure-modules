@@ -80,7 +80,7 @@ module "this-iam-group-admin" {
     module.this-iam-role-admin.arn
   ]
   group_users = [
-    module.this-iam.user-admin.id
+    module.this-iam-user-admin.id
   ]
 }
 
