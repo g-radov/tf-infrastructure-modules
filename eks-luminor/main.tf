@@ -67,7 +67,7 @@ module "this-iam-role-admin" {
   ]
   create_role       = true
   role_name         = "eks-luminor-admin"
-  role_requires_mfa = true
+  role_requires_mfa = false
   tags = merge(
     local.default.tags,
     var.tags
@@ -100,7 +100,7 @@ module "this-read-only-role" {
   ]
   create_role       = true
   role_name         = "eks-luminor-read-only"
-  role_requires_mfa = true
+  role_requires_mfa = false
   tags = merge(
     local.default.tags,
     var.tags
