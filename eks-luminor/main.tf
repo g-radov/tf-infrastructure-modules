@@ -61,13 +61,12 @@ module "this-iam-role-admin" {
   trusted_role_arns = [
     module.this-iam-user-admin.this_iam_user_arn
   ]
+  trusted_role_services = [
+    "eks.amazonaws.com"
+  ]
   create_role       = true
   role_name         = "eks-luminor-admin"
   role_requires_mfa = true
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonCognitoReadOnly",
-    "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess",
-  ]
 }
 
 module "this-iam-user-admin" {
@@ -94,11 +93,10 @@ module "this-read-only-role" {
   trusted_role_arns = [
     module.this-iam-user-read-only.this_iam_user_arn
   ]
+  trusted_role_services = [
+    "eks.amazonaws.com"
+  ]
   create_role       = true
   role_name         = "eks-luminor-read-only"
   role_requires_mfa = true
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonCognitoReadOnly",
-    "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess",
-  ]
 }
