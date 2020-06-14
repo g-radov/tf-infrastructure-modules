@@ -84,7 +84,7 @@ variable "cluster_version" {
 variable "wg_instance_type" {
   description = "The type of instance to use for worker nodes"
   type        = string
-  default     = "t3a.small"
+  default     = "t2.micro"
 }
 
 variable "wg_asg_max_size" {
