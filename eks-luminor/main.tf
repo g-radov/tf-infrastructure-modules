@@ -56,3 +56,95 @@ module "this-cluster" {
     }
   ]
 }
+
+module "this-iam-role-admin" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "~> 2.0"
+  trusted_role_arns = [
+    module.this-iam-group-admin.arn
+  ]
+  create_role       = true
+  role_name         = "eks-luminor-admin"
+  role_requires_mfa = true
+  custom_role_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonCognitoReadOnly",
+    "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess",
+  ]
+}
+
+module "this-iam-group-admin" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-assumable-roles-policy"
+  version = "~> 2.0"
+  name    = "eks-luminor-admin"
+  assumable_roles = [
+    module.this-iam-role-admin.arn
+  ]
+  group_users = [
+    module.this-iam.user-admin.id
+  ]
+}
+
+module "this-iam-user-admin" {
+  source                  = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version                 = "~> 2.0"
+  name                    = "eks-luminor-admin"
+  force_destroy           = true
+  pgp_key                 = "keybase:test"
+  password_reset_required = false
+}
+
+
+
+
+
+#module "this-read-only-user" {
+#  source  = "terraform-aws-modules/iam/aws//modules/iam-user"
+#  version = "~> 2.0"
+#
+#  name          = "eks-read-only-user"
+#  force_destroy = true
+#
+#  pgp_key = "keybase:test"
+#
+#  password_reset_required = false
+#}
+#
+#
+#
+#module "this-read-only-role" {
+#  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+#  version = "~> 2.0"
+#
+#  trusted_role_arns = [
+#    "arn:aws:iam::307990089504:root",
+#    "arn:aws:iam::835367859851:user/anton",
+#  ]
+#
+#  create_role = true
+#
+#  role_name         = "${var.name}-admin"
+#  role_requires_mfa = true
+#
+#  custom_role_policy_arns = [
+#    "arn:aws:iam::aws:policy/AmazonCognitoReadOnly",
+#    "arn:aws:iam::aws:policy/AlexaForBusinessFullAccess",
+#  ]
+#}
+#
+#
+#
+#module "this-eks-read-only" {
+#  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-assumable-roles-policy"
+#  version = "~> 2.0"
+#
+#  name = "eks-luminor-read-only"
+#
+#  assumable_roles = [
+#    "arn:aws:iam::835367859855:role/readonly" # these roles can be created using `iam_assumable_roles` submodule
+#  ]
+#
+#  group_users = [
+#    "user1",
+#    "user2"
+#  ]
+#}
