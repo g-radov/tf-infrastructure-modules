@@ -71,19 +71,21 @@ module "this-iam-role-admin" {
 }
 
 module "this-iam-user-admin" {
-  source                  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version                 = "~> 2.0"
-  name                    = "eks-luminor-admin"
-  force_destroy           = true
-  password_reset_required = false
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version                       = "~> 2.0"
+  name                          = "eks-luminor-admin"
+  force_destroy                 = true
+  password_reset_required       = false
+  create_iam_user_login_profile = false
 }
 
 module "this-iam-user-read-only" {
-  source                  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version                 = "~> 2.0"
-  name                    = "eks-luminor-read-only"
-  force_destroy           = true
-  password_reset_required = false
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version                       = "~> 2.0"
+  name                          = "eks-luminor-read-only"
+  force_destroy                 = true
+  password_reset_required       = false
+  create_iam_user_login_profile = false
 }
 
 module "this-read-only-role" {
