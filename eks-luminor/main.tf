@@ -8,18 +8,16 @@ locals {
 }
 
 module "this-vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.39.0"
-  name    = "vpc-${var.name}"
-  cidr    = var.vpc_cidr_block
-
-  azs             = var.azs
-  private_subnets = var.private_subnets
-  public_subnets  = var.public_subnets
-
-  enable_nat_gateway = var.enable_nat_gateway
-  enable_vpn_gateway = var.enable_vpn_gateway
-
+  source               = "terraform-aws-modules/vpc/aws"
+  version              = "2.39.0"
+  name                 = "vpc-${var.name}"
+  cidr                 = var.vpc_cidr_block
+  azs                  = var.azs
+  private_subnets      = var.private_subnets
+  public_subnets       = var.public_subnets
+  enable_nat_gateway   = var.enable_nat_gateway
+  enable_vpn_gateway   = var.enable_vpn_gateway
+  enable_dns_hostnames = var.enable_dns_hostnames
   tags = merge(
     local.default.tags,
     var.tags
@@ -81,14 +79,10 @@ module "this-iam-user-admin" {
 }
 
 module "this-iam-user-read-only" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "~> 2.0"
-
-  name          = "eks-luminor-read-only"
-  force_destroy = true
-
-  pgp_key = "keybase:test"
-
+  source                  = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version                 = "~> 2.0"
+  name                    = "eks-luminor-read-only"
+  force_destroy           = true
   password_reset_required = false
 }
 

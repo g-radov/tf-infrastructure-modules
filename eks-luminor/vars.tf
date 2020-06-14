@@ -62,6 +62,13 @@ variable "enable_vpn_gateway" {
   default     = false
 }
 
+variable "enable_dns_hostnames" {
+  description = "Enable/disable DNS hostnames in the VPC"
+  type        = bool
+  default     = true
+
+}
+
 variable "tags" {
   description = "A map of tags to assign to the resource"
   type        = map(string)
