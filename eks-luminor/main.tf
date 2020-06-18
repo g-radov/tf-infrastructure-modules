@@ -25,11 +25,11 @@ module "vpc" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = module.this-cluster.cluster_id
+  name = module.cluster.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.this-cluster.cluster_id
+  name = module.cluster.cluster_id
 }
 
 provider "kubernetes" {
