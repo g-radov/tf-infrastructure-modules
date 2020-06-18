@@ -7,7 +7,7 @@ locals {
   }
 }
 
-module "this-vpc" {
+module "vpc" {
   source               = "terraform-aws-modules/vpc/aws"
   version              = "2.39.0"
   name                 = "vpc-${var.name}"
@@ -59,7 +59,7 @@ module "this-cluster" {
   )
 }
 
-module "this-iam-role-admin" {
+module "iam-role-admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "~> 2.0"
   trusted_role_arns = [
@@ -74,7 +74,7 @@ module "this-iam-role-admin" {
   )
 }
 
-module "this-iam-user-admin" {
+module "iam-user-admin" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-user"
   version                       = "~> 2.0"
   name                          = "eks-luminor-admin"
@@ -83,7 +83,7 @@ module "this-iam-user-admin" {
   create_iam_user_login_profile = false
 }
 
-module "this-iam-user-read-only" {
+module "iam-user-read-only" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-user"
   version                       = "~> 2.0"
   name                          = "eks-luminor-read-only"
@@ -92,7 +92,7 @@ module "this-iam-user-read-only" {
   create_iam_user_login_profile = false
 }
 
-module "this-read-only-role" {
+module "iam-role-read-only" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "~> 2.0"
   trusted_role_arns = [
