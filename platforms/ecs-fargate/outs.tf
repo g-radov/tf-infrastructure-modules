@@ -1,4 +1,4 @@
-output "this_lb_arn" {
+output "alb_arn" {
   description = "The ARN of the load balancer we created"
   value       = module.this_alb.this_lb_arn
 }
@@ -13,9 +13,9 @@ output "target_group_names" {
   value       = module.this_alb.target_group_names
 }
 
-output "alb_security_group_id" {
-  description = "the ID of the security group"
-  value       = module.this_alb_sg.this_security_group_id
+output "alb_sg_client_id" {
+  description = "the ID of the ALB client security group"
+  value       = module.this_alb_sg_client.this_security_group_id
 }
 
 output "ecs_cluster_arn" {
