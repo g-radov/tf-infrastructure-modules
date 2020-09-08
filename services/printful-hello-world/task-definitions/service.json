@@ -1,0 +1,13 @@
+[
+  {
+    "name": "printful-jenkins",
+    "image": "jenkins:alpine",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 80
+      }
+    ]
+  }
+]
