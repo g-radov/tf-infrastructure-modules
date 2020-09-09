@@ -44,11 +44,11 @@ module "this_alb" {
   target_group_tags = var.tags
 }
 
-# ALB security groups are created using `client/server` principle.
+# ALB security groups are created using the `client/server` principle.
 module "this_alb_sg_server" {
   # Create server-security group for the application load balancer
   # created previously. This security group will permit access from
-  # services, which have client-security group assigned to them.
+  # services, which have the client-security group assigned to them.
   source              = "terraform-aws-modules/security-group/aws"
   version             = "3.16.0"
   name                = "${var.name}-alb-server"
