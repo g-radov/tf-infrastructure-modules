@@ -15,8 +15,7 @@ resource "aws_ecs_task_definition" "this" {
   ]
   cpu                = var.cpu
   memory             = var.memory
-  task_role_arn      = module.this_iam_role.this_iam_role_arn
-  execution_role_arn = module.this_iam_role.this_iam_role_arn
+  execution_role_arn = module.this_iam_exe_role.this_iam_role_arn
   network_mode       = "awsvpc"
   volume {
     name = "service-storage"
@@ -30,6 +29,9 @@ resource "aws_ecs_service" "this" {
   launch_type     = "FARGATE"
   task_definition = aws_ecs_task_definition.this.id
   desired_count   = var.desired_count
+  lifecycle {
+    ignore_changes = [desired_count]
+  }
   load_balancer {
     target_group_arn = var.target_group_arn
     container_name   = var.container_name
@@ -43,6 +45,30 @@ resource "aws_ecs_service" "this" {
         var.security_groups,
       ]
     )
+  }
+}
+
+resource "aws_appautoscaling_target" "ecs_target" {
+  max_capacity       = var.max_capacity
+  min_capacity       = var.desired_count
+  resource_id        = "service/${var.cluster}/${aws_ecs_service.this.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "ecs_policy" {
+  name               = "${var.name}-scale-out"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  target_tracking_scaling_policy_configuration {
+    target_value       = 75.0
+    scale_in_cooldown  = 60
+    scale_out_cooldown = 60
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
   }
 }
 
@@ -88,19 +114,19 @@ module "this_iam_policy" {
   policy      = data.aws_iam_policy_document.this.json
 }
 
-module "this_iam_role" {
+module "this_iam_exe_role" {
   source            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version           = "~> 2.0"
   create_role       = true
   role_requires_mfa = false
-  role_name         = var.name
-  role_description  = "${var.name} - IAM role"
+  role_name         = "${var.name}-exe"
+  role_description  = "${var.name} - task execution IAM role"
   trusted_role_services = [
-    "ecs.amazonaws.com",
     "ecs-tasks.amazonaws.com"
   ]
   custom_role_policy_arns = [
-    module.this_iam_policy.arn
+    module.this_iam_policy.arn,
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
   ]
 }
 
