@@ -1,13 +1,21 @@
 [
   {
-    "name": "printful-jenkins",
-    "image": "jenkins:alpine",
+    "name": "${name}",
+    "image": "${image}",
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 8080,
-        "hostPort": 8080
+        "containerPort": ${container_port},
+        "hostPort": ${host_port}
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${awslogs_group}",
+        "awslogs-region": "${awslogs_region}",
+        "awslogs-stream-prefix": "${awslogs_stream_prefix}"
+      }
+    }
   }
 ]
