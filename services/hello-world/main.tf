@@ -36,8 +36,8 @@ resource "aws_ecs_task_definition" "this" {
     "FARGATE"
   ]
   # Set Fargate hardware resource limits.
-  cpu                = var.cpu
-  memory             = var.memory
+  cpu    = var.cpu
+  memory = var.memory
   # Assign IAM role, so the Docker containers can communicate with AWS services,
   # for example: send logs to CloudWatch service.
   execution_role_arn = module.this_iam_exe_role.this_iam_role_arn
@@ -66,6 +66,7 @@ resource "aws_ecs_service" "this" {
     container_name   = var.container_name
     container_port   = var.container_port
   }
+  # Network configuration for ECS service
   network_configuration {
     subnets = var.subnets
     security_groups = flatten(
@@ -104,7 +105,7 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
 module "this_ecs_sg" {
   # ECS service stand-alone security group.
   source      = "terraform-aws-modules/security-group/aws"
-  version = "3.16.0"
+  version     = "3.16.0"
   name        = var.name
   description = "${var.name} - Security Group"
   vpc_id      = var.vpc_id
@@ -150,7 +151,7 @@ module "this_iam_policy" {
 }
 
 module "this_iam_exe_role" {
-  # Create task execution IAM role.
+  # Create ECS task definition execution IAM role.
   source            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version           = "~> 2.0"
   create_role       = true
@@ -158,11 +159,12 @@ module "this_iam_exe_role" {
   role_name         = "${var.name}-exe"
   role_description  = "${var.name} - task execution IAM role"
   trusted_role_services = [
+    "ecs.amazonaws.com",
     "ecs-tasks.amazonaws.com"
   ]
   custom_role_policy_arns = [
     module.this_iam_policy.arn,
-    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
   ]
 }
 
