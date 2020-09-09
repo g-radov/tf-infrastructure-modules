@@ -5,8 +5,10 @@
 # - https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/2.48.0
 
 # VPC configuration start
-# ===============================
+# =======================
 module "this" {
+  # Create networking infrastructure where we will deploy
+  # our application infrastructure
   source             = "terraform-aws-modules/vpc/aws"
   version            = "2.48.0"
   name               = var.name
@@ -18,4 +20,4 @@ module "this" {
   tags               = var.tags
 }
 # VPC configuration end
-# =============================
+# =====================

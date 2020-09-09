@@ -17,9 +17,12 @@
 
 # ECS service configuration start
 # ===============================
+# Create ECS task definition, which will define,
+# what kind of a task will be running on ECS service.
 resource "aws_ecs_task_definition" "this" {
   family = var.family
   container_definitions = templatefile("task-definitions/service.json", {
+    # Define variables for `service.json` container specification.
     name                  = var.name
     image                 = var.container_image
     container_port        = var.container_port
@@ -32,8 +35,11 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = [
     "FARGATE"
   ]
+  # Set Fargate hardware resource limits.
   cpu                = var.cpu
   memory             = var.memory
+  # Assign IAM role, so the Docker containers can communicate with AWS services,
+  # for example: send logs to CloudWatch service.
   execution_role_arn = module.this_iam_exe_role.this_iam_role_arn
   network_mode       = "awsvpc"
   volume {
@@ -43,6 +49,7 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_ecs_service" "this" {
+  # Create ECS service, which will run ECS task definition created previously.
   name            = var.name
   cluster         = var.cluster
   launch_type     = "FARGATE"
@@ -51,6 +58,9 @@ resource "aws_ecs_service" "this" {
   lifecycle {
     ignore_changes = [desired_count]
   }
+  # Application load balancer definition.
+  # Application load balancer is defined in a separate infrastructure module.
+  # Application load balancer variables are passed from dependencies defined in terragrunt.hcl.
   load_balancer {
     target_group_arn = var.target_group_arn
     container_name   = var.container_name
@@ -92,16 +102,19 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
 }
 
 module "this_ecs_sg" {
+  # ECS service stand-alone security group.
   source      = "terraform-aws-modules/security-group/aws"
   version = "3.16.0"
   name        = var.name
   description = "${var.name} - Security Group"
   vpc_id      = var.vpc_id
+  # Allow all traffic inside the security group.
   ingress_with_self = [
     {
       rule = "all-all"
     },
   ]
+  # Allow all egress traffic.
   egress_with_cidr_blocks = [
     {
       rule        = "all-all"
@@ -111,6 +124,7 @@ module "this_ecs_sg" {
 }
 
 data "aws_iam_policy_document" "this" {
+  # IAM policy for task execution IAM role for task definition.
   statement {
     sid = "AllowECSCreateCloudWatchLogs"
     actions = [
@@ -126,6 +140,7 @@ data "aws_iam_policy_document" "this" {
 }
 
 module "this_iam_policy" {
+  # Create task execution role IAM policy.
   source      = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version     = "~> 2.0"
   name        = var.name
@@ -135,6 +150,7 @@ module "this_iam_policy" {
 }
 
 module "this_iam_exe_role" {
+  # Create task execution IAM role.
   source            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version           = "~> 2.0"
   create_role       = true
@@ -151,6 +167,8 @@ module "this_iam_exe_role" {
 }
 
 resource "aws_cloudwatch_log_group" "container_logs" {
+  # Create CloudWatch log-group,
+  # which will be used by containers to stream logs to.
   name = var.container_name
   tags = var.tags
 }
