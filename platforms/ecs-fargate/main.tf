@@ -6,7 +6,7 @@
 # - https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/3.16.0
  
 # Resources used:
-# - aws_ecs_cluster
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster
 
 # ALB configuration start
 # =======================
@@ -42,6 +42,7 @@ module "this_alb" {
   target_group_tags = var.tags
 }
 
+# ALB security groups are created using `client/server` principle.
 module "this_alb_sg_server" {
   source              = "terraform-aws-modules/security-group/aws"
   version             = "3.16.0"

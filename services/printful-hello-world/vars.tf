@@ -25,7 +25,10 @@ variable "container_port" {
 
 variable "container_name" {
   type        = string
-  description = "The name of the container to associate with the load balancer (as it appears in a container definition)."
+  description = <<EOF
+  "The name of the container to associate with the load balancer
+  (as it appears in a container definition)."
+  EOF
   default     = null
 }
 

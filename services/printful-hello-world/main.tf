@@ -6,14 +6,14 @@
 # - https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/2.20.0/submodules/iam-assumable-role
 
 # Resources used:
-# - aws_ecs_task_definition
-# - aws_ecs_service
-# - aws_appautoscaling_target
-# - aws_appautoscaling_policy
-# - aws_cloudwatch_log_group
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_policy
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group
 
 # Data sources used:
-# - aws_iam_policy_document
+# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy
 
 # ECS service configuration start
 # ===============================

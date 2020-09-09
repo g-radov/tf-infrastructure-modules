@@ -5,7 +5,7 @@
 # - https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/2.48.0
 
 # VPC configuration start
-# =======================
+# ===============================
 module "this" {
   source             = "terraform-aws-modules/vpc/aws"
   version            = "2.48.0"
@@ -18,4 +18,4 @@ module "this" {
   tags               = var.tags
 }
 # VPC configuration end
-# =====================
+# =============================
