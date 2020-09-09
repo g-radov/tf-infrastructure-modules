@@ -1,3 +1,13 @@
+
+# For variable descriptions, see `vars.tf`
+
+# Modules used:
+# - https://registry.terraform.io/modules/terraform-aws-modules/alb/aws/5.8.0
+# - https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/3.16.0
+ 
+# Resources used:
+# - aws_ecs_cluster
+
 # ALB configuration start
 # =======================
 module "this_alb" {
@@ -34,6 +44,7 @@ module "this_alb" {
 
 module "this_alb_sg_server" {
   source              = "terraform-aws-modules/security-group/aws"
+  version             = "3.16.0"
   name                = "${var.name}-alb-server"
   description         = "${var.name} - ALB security group (server)"
   vpc_id              = var.vpc_id
@@ -57,6 +68,7 @@ module "this_alb_sg_server" {
 
 module "this_alb_sg_client" {
   source      = "terraform-aws-modules/security-group/aws"
+  version     = "3.16.0"
   name        = "${var.name}-alb-client"
   description = "${var.name} - security group (client)"
   vpc_id      = var.vpc_id

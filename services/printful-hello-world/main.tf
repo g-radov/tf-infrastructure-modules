@@ -1,3 +1,22 @@
+# For variable descriptions, see `vars.tf`
+
+# Modules used:
+# - https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/3.16.0
+# - https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/2.20.0/submodules/iam-policy
+# - https://registry.terraform.io/modules/terraform-aws-modules/iam/aws/2.20.0/submodules/iam-assumable-role
+
+# Resources used:
+# - aws_ecs_task_definition
+# - aws_ecs_service
+# - aws_appautoscaling_target
+# - aws_appautoscaling_policy
+# - aws_cloudwatch_log_group
+
+# Data sources used:
+# - aws_iam_policy_document
+
+# ECS service configuration start
+# ===============================
 resource "aws_ecs_task_definition" "this" {
   family = var.family
   container_definitions = templatefile("task-definitions/service.json", {
@@ -74,6 +93,7 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
 
 module "this_ecs_sg" {
   source      = "terraform-aws-modules/security-group/aws"
+  version = "3.16.0"
   name        = var.name
   description = "${var.name} - Security Group"
   vpc_id      = var.vpc_id
@@ -134,3 +154,5 @@ resource "aws_cloudwatch_log_group" "container_logs" {
   name = var.container_name
   tags = var.tags
 }
+# ECS service configuration end
+# =============================
