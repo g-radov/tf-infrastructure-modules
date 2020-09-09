@@ -37,6 +37,12 @@ variable "desired_count" {
   default     = 3
 }
 
+variable "max_capacity" {
+  type        = number
+  description = "The upper limit of ECS task scaling."
+  default     = 6
+}
+
 variable "target_group_arn" {
   type        = string
   description = "The ARN of the Load Balancer target group to associate with the service."
@@ -44,9 +50,9 @@ variable "target_group_arn" {
 }
 
 variable "container_image" {
-  type = string
+  type        = string
   description = "Docker image used for launching containers."
-  default = null
+  default     = null
 }
 
 variable "container_name" {
