@@ -12,12 +12,12 @@ module "this_alb" {
   ]
   target_groups = [
     {
-      name             = var.name
+      name_prefix      = "ecs-"
       backend_protocol = "HTTP"
-      backend_port     = 8080
+      backend_port     = 80
       target_type      = "ip"
       health_check = {
-        matcher = "200,403"
+        matcher = "200"
       }
     }
   ]

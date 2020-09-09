@@ -1,6 +1,15 @@
 resource "aws_ecs_task_definition" "this" {
-  family                = var.family
-  container_definitions = file("task-definitions/service.json")
+  family = var.family
+  container_definitions = templatefile("task-definitions/service.json", {
+    name                  = var.name
+    image                 = var.container_image
+    container_port        = var.container_port
+    host_port             = var.container_port
+    awslogs_group         = var.container_name
+    awslogs_region        = var.region
+    awslogs_stream_prefix = var.name
+    }
+  )
   requires_compatibilities = [
     "FARGATE"
   ]
@@ -35,7 +44,6 @@ resource "aws_ecs_service" "this" {
       ]
     )
   }
-  # tags = var.tags
 }
 
 module "this_ecs_sg" {
@@ -94,4 +102,9 @@ module "this_iam_role" {
   custom_role_policy_arns = [
     module.this_iam_policy.arn
   ]
+}
+
+resource "aws_cloudwatch_log_group" "container_logs" {
+  name = var.container_name
+  tags = var.tags
 }

@@ -1,3 +1,8 @@
+variable "region" {
+  type        = string
+  description = "AWS region used for provisioned resources."
+}
+
 variable "family" {
   type        = string
   description = "A unique name for your task definition."
@@ -38,6 +43,12 @@ variable "target_group_arn" {
   default     = null
 }
 
+variable "container_image" {
+  type = string
+  description = "Docker image used for launching containers."
+  default = null
+}
+
 variable "container_name" {
   type        = string
   description = "The name of the container to associate with the load balancer (as it appears in a container definition)."
@@ -64,7 +75,7 @@ variable "subnets" {
 
 variable "security_groups" {
   type        = list(string)
-  description = "A list of security groups to assign to ECS service"
+  description = "A list of security groups to assign to ECS service."
   default     = null
 }
 
