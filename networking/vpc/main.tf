@@ -1,3 +1,5 @@
+# VPC configuration start
+# =======================
 module "this" {
   source              = "terraform-aws-modules/vpc/aws"
   name                = var.name
@@ -8,3 +10,5 @@ module "this" {
   enable_nat_gateway  = true
   tags                = var.tags
 }
+# VPC configuration end
+# =====================
