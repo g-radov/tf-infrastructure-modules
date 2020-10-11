@@ -1,3 +1,9 @@
+# modules used:
+# =============
+# - https://registry.terraform.io/modules/terraform-google-modules/kubernetes-engine/google/latest
+
+# GKE config start
+# ================
 module "this" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
   version                    = "11.1.0"
@@ -16,7 +22,7 @@ module "this" {
   node_pools = [
     {
       name               = "default-node-pool"
-      machine_type       = "e2-medium"
+      machine_type       = "e2-standard-2"
       min_count          = 1
       max_count          = 10
       local_ssd_count    = 0
@@ -54,3 +60,5 @@ module "this" {
     ]
   }
 }
+# GKE config end
+# ==============

@@ -1,3 +1,9 @@
+# modules used:
+# =============
+# - https://registry.terraform.io/modules/terraform-google-modules/network/google/latest
+
+# VPC config start
+# ================
 module "vpc" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 2.5"
@@ -30,3 +36,5 @@ module "vpc" {
     }
   ]
 }
+# VPC config end
+# ==============
